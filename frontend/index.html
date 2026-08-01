@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>T1 BorrowBox — Operational Control Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+
+  <div class="app-container">
+
+    <aside class="sidebar" id="appSidebar">
+      <div>
+        <div class="sidebar-header">
+          <a href="#" class="brand">
+            <img src="/static/img/t1_logo.png" alt="T1 Logo" class="brand-logo-img">
+            <div class="brand-text">
+              <span class="brand-title"></span>
+            </div>
+          </a>
+        </div>
+
+        <div class="sidebar-menu">
+          <a href="#" class="nav-item active" data-nav="dashboard">DASHBOARD</a>
+          <a href="#" class="nav-item" data-nav="coach">COACH</a>
+          <a href="#" class="nav-item" data-nav="players">PLAYERS</a>
+          <a href="#" class="nav-item" data-nav="availability">PERSONNEL AVAILABILITY</a>
+        </div>
+      </div>
+
+      <div class="sidebar-footer" style="padding: 1.25rem;">
+        <a href="#" class="nav-item" style="padding: 0.85rem 1.5rem;" data-nav="settings">SETTINGS</a>
+      </div>
+    </aside>
+
+    <div class="main-wrapper">
+
+      <header class="topbar">
+        <div class="topbar-search">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" placeholder="SEARCH OPERATIONAL DATABASE...">
+        </div>
+
+        <div class="topbar-right">
+          <button class="icon-btn" title="Alert Notifications" style="color: var(--accent-red); position: relative;">
+            <i class="fas fa-bell"></i>
+            <span style="position: absolute; top: 2px; right: 2px; width: 6px; height: 6px; background: var(--accent-red); border-radius: 50%;"></span>
+          </button>
+
+          <div class="user-profile">
+            <div class="user-details">
+              <span class="user-name">ADMIN USER</span>
+            </div>
+            <div class="user-avatar">
+              <i class="fas fa-user-shield" style="font-size: 1.2rem; color: var(--accent-red); margin: 6px;"></i>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-content">
+
+        <section class="page-header">
+          <div class="header-subtitle" id="pageSubtitle">
+            <div class="red-square-marker"></div> OPERATIONAL CONTROL CENTER
+          </div>
+          <h1 class="header-title" id="pageTitle">SYSTEMS OVERVIEW</h1>
+        </section>
+
+        <div class="page-view active" id="view-dashboard">
+
+          <section class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-title">PERSONNEL COUNT</span>
+                <i class="fas fa-award stat-icon"></i>
+              </div>
+              <div class="stat-value-group">
+                <span class="stat-value" id="statTotal">—</span>
+                <span class="stat-subtext">TOTAL</span>
+              </div>
+              <div class="stat-bar">
+                <div class="stat-bar-fill" style="width: 75%;"></div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-title">AWAITING COMMAND</span>
+                <i class="fas fa-triangle-exclamation stat-icon"></i>
+              </div>
+              <div class="stat-value-group">
+                <span class="stat-value" id="statBorrowed">—</span>
+                <span class="stat-subtext" style="color:#cbd5e1; font-weight:400;">ACTIVE</span>
+              </div>
+              <div class="stat-bar">
+                <div class="stat-bar-fill" style="width: 40%;"></div>
+              </div>
+            </div>
+          </section>
+
+          <div class="dashboard-columns">
+            <div class="ledger-container">
+              <div class="ledger-header">
+                <div class="ledger-title-group">
+                  <div class="red-vertical-bar"></div>
+                  <h2 class="ledger-title">PERSONNEL LOGGER</h2>
+                </div>
+                <div style="display:flex; align-items:center; gap:1rem;">
+                  <button class="btn-add-ledger" id="openAddBtn">
+                    <i class="fas fa-plus"></i> ADD PERSONNEL
+                  </button>
+                </div>
+              </div>
+
+              <select id="categoryFilter" style="display:none;">
+                <option value="">All Categories</option>
+              </select>
+
+              <div id="tableViewWrapper">
+                <table class="ledger-table">
+                  <thead>
+                    <tr>
+                      <th>ENTITY SIGNATURE</th>
+                      <th>TASK ACTION</th>
+                      <th>TIMESTAMP</th>
+                      <th>STATUS</th>
+                      <th>ACTIONS</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tableBody"></tbody>
+                </table>
+              </div>
+              <div id="emptyState" class="empty-state" style="display:none;">
+                <i class="fas fa-circle-exclamation"></i>
+                <h3>NO PERSONNEL LOGGER DATA</h3>
+                <p>Adjust filter constraints to load records.</p>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+        <div class="page-view" id="view-coach">
+          <div class="ledger-container">
+            <div class="ledger-header">
+              <div class="ledger-title-group">
+                <div class="red-vertical-bar"></div>
+                <h2 class="ledger-title">COACH MANAGEMENT</h2>
+              </div>
+              <button class="btn-add-ledger" id="openAddBtnCoach">
+                <i class="fas fa-plus"></i> ADD RECORD
+              </button>
+            </div>
+            <div id="tableViewWrapperCoach">
+              <table class="ledger-table">
+                <thead>
+                  <tr>
+                    <th>ENTITY SIGNATURE</th>
+                    <th>TASK ACTION</th>
+                    <th>TIMESTAMP</th>
+                    <th>STATUS</th>
+                    <th>ACTIONS</th>
+                  </tr>
+                </thead>
+                <tbody id="tableBodyCoach"></tbody>
+              </table>
+            </div>
+            <div id="emptyStateCoach" class="empty-state" style="display:none;">
+              <i class="fas fa-circle-exclamation"></i>
+              <h3>NO COACH RECORDS</h3>
+              <p>No maintenance or review items found.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="page-view" id="view-players">
+          <div class="ledger-container">
+            <div class="ledger-header">
+              <div class="ledger-title-group">
+                <div class="red-vertical-bar"></div>
+                <h2 class="ledger-title">PLAYERS DIRECTORY</h2>
+              </div>
+              <button class="btn-add-ledger" id="openAddBtnPlayers">
+                <i class="fas fa-plus"></i> ADD PLAYER RECORD
+              </button>
+            </div>
+            <div id="tableViewWrapperPlayers">
+              <table class="ledger-table">
+                <thead>
+                  <tr>
+                    <th>ENTITY SIGNATURE</th>
+                    <th>TASK ACTION</th>
+                    <th>TIMESTAMP</th>
+                    <th>STATUS</th>
+                    <th>ACTIONS</th>
+                  </tr>
+                </thead>
+                <tbody id="tableBodyPlayers"></tbody>
+              </table>
+            </div>
+            <div id="emptyStatePlayers" class="empty-state" style="display:none;">
+              <i class="fas fa-circle-exclamation"></i>
+              <h3>NO ACTIVE BORROWINGS</h3>
+              <p>No players currently have items checked out.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="page-view" id="view-availability">
+          <div class="ledger-container">
+            <div class="ledger-header">
+              <div class="ledger-title-group">
+                <div class="red-vertical-bar"></div>
+                <h2 class="ledger-title">PERSONNEL AVAILABILITY</h2>
+              </div>
+              <button class="btn-add-ledger" id="openAddBtnAvail">
+                <i class="fas fa-plus"></i> ADD PERSONNEL
+              </button>
+            </div>
+            <div id="tableViewWrapperAvail">
+              <table class="ledger-table">
+                <thead>
+                  <tr>
+                    <th>ENTITY SIGNATURE</th>
+                    <th>TASK ACTION</th>
+                    <th>TIMESTAMP</th>
+                    <th>STATUS</th>
+                    <th>ACTIONS</th>
+                  </tr>
+                </thead>
+                <tbody id="tableBodyAvail"></tbody>
+              </table>
+            </div>
+            <div id="emptyStateAvail" class="empty-state" style="display:none;">
+              <i class="fas fa-circle-exclamation"></i>
+              <h3>NO AVAILABLE PERSONNEL</h3>
+              <p>All personnel are currently assigned.</p>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+
+  </div>
+
+  <div id="formModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modalTitle" class="modal-title">ADD PERSONNEL</h3>
+        <button id="closeFormModal" class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+
+      <form id="itemForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="formTitle">FULL NAME *</label>
+            <input type="text" id="formTitle" class="form-control" placeholder="e.g. RYAN SANTOS" required>
+          </div>
+
+          <div class="form-group">
+            <label for="formPersonnelType">PERSONNEL TYPE *</label>
+            <select id="formPersonnelType" class="form-control" required>
+              <option value="">SELECT PERSONNEL TYPE...</option>
+              <option value="Head Coach">HEAD COACH</option>
+              <option value="Coach">COACH</option>
+              <option value="Player">PLAYER</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="formStatus">STATUS</label>
+            <select id="formStatus" class="form-control">
+              <option value="AVAILABLE">AVAILABLE</option>
+              <option value="BORROWED">ACTIVE / BORROWED</option>
+              <option value="MAINTENANCE">UNDER REVIEW</option>
+              <option value="RESERVED">RESERVED</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="formNotes">NOTES / DETAILS</label>
+            <textarea id="formNotes" class="form-control" rows="3" placeholder="Additional info about this personnel..."></textarea>
+          </div>
+
+          <input type="hidden" id="formCategory" value="">
+          <input type="hidden" id="formCondition" value="">
+          <input type="hidden" id="formBorrowerName" value="">
+          <input type="hidden" id="formBorrowerEmail" value="">
+          <input type="hidden" id="formDueDate" value="">
+          <div id="borrowerFields" style="display:none;"></div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" id="cancelFormBtn" class="btn-secondary">CANCEL</button>
+          <button type="submit" id="saveItemBtn" class="btn-execute"><i class="fas fa-save"></i> SAVE RECORD</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="deleteModal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 420px;">
+      <div class="modal-header">
+        <h3 class="modal-title" style="color: var(--accent-red);">DELETE ENTRY</h3>
+        <button id="closeDeleteModal" class="modal-close"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body" style="text-align: center;">
+        <i class="fas fa-triangle-exclamation" style="font-size: 2.5rem; color: var(--accent-red); margin-bottom: 1rem;"></i>
+        <p style="font-family: var(--font-mono); font-size: 0.85rem;">CONFIRM DELETION OF RECORD <strong id="deleteItemName" style="color: #fff;">THIS ITEM</strong>?</p>
+      </div>
+      <div class="modal-footer" style="justify-content: center;">
+        <button id="cancelDeleteBtn" class="btn-secondary">CANCEL</button>
+        <button id="confirmDeleteBtn" class="btn-execute"><i class="fas fa-trash-alt"></i> DELETE RECORD</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+
+</html>
